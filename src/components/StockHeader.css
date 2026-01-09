@@ -1,0 +1,43 @@
+.stock-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border-radius: 10px;
+  margin-bottom: 20px;
+}
+
+.stock-info h2 {
+  margin: 0;
+  font-size: 2em;
+}
+
+.stock-info p {
+  margin: 5px 0 0 0;
+  opacity: 0.8;
+}
+
+.price-info {
+  text-align: right;
+}
+
+.price {
+  font-size: 2em;
+  font-weight: bold;
+  display: block;
+}
+
+.change {
+  font-size: 1.2em;
+}
+
+.change.positive {
+  color: #4caf50;
+}
+
+.change.negative {
+  color: #f44336;
+}
+

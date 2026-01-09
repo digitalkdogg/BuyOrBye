@@ -1,0 +1,25 @@
+.time-range-selector {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.time-range-selector button {
+  padding: 10px 15px;
+  border: 1px solid #ccc;
+  background: white;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.time-range-selector button.active {
+  background: #667eea;
+  color: white;
+  border-color: #667eea;
+}
+
+.time-range-selector button:hover {
+  background: #f0f0f0;
+}
+
