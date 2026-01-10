@@ -25,11 +25,17 @@ a:hover {
 body {
   margin: 0;
   display: flex;
-  place-items: center;
+  /* center vertically but allow children to stretch horizontally */
+  align-items: center;
+  justify-content: flex-start;
   min-width: 320px;
   min-height: 100vh;
 }
 
+/* Ensure the React root element fills available width */
+#root {
+  width: 100%;
+}
 h1 {
   font-size: 3.2em;
   line-height: 1.1;
