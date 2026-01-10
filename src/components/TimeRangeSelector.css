@@ -14,9 +14,9 @@
 }
 
 .time-range-selector button.active {
-  background: #667eea;
+  background: #0f9e5b;
   color: white;
-  border-color: #667eea;
+  border-color: #0f9e5b;
 }
 
 .time-range-selector button:hover {

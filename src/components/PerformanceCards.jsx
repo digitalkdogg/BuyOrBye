@@ -10,17 +10,22 @@ function PerformanceCards({ performance }) {
 
   return (
     <div className="performance-cards">
-      {periods.map(period => (
-        <div key={period.key} className="performance-card">
-          <h4>{period.label}</h4>
-          <div className="change">
-            ${performance[period.key].change.toFixed(2)}
+      {periods.map(period => {
+        const perf = performance?.[period.key] || {}
+        const change = perf.change
+        const percent = perf.percent
+        return (
+          <div key={period.key} className="performance-card">
+            <h4>{period.label}</h4>
+            <div className="change">
+              {change != null ? `$${Number(change).toFixed(2)}` : '—'}
+            </div>
+            <div className="percent">
+              {percent != null ? `${Number(percent).toFixed(2)}%` : '—'}
+            </div>
           </div>
-          <div className="percent">
-            {performance[period.key].percent.toFixed(2)}%
-          </div>
-        </div>
-      ))}
+        )
+      })}
     </div>
   )
 }

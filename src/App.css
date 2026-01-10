@@ -8,7 +8,7 @@
 
 /* Centering container with a max-width so content can grow full-width up to 1080px */
 .container {
-  width: 100%;
+  width: calc(100% - 16px);
   max-width: 1080px;
   margin: 0 auto;
   padding: 0 16px;
@@ -25,6 +25,7 @@
 
 .app-header h1 {
   margin: 0;
-  color: #667eea;
+  color:#0f9e5b;
+;
   font-size: 2em;
 }

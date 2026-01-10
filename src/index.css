@@ -30,6 +30,7 @@ body {
   justify-content: flex-start;
   min-width: 320px;
   min-height: 100vh;
+  overflow-x:hidden;
 }
 
 /* Ensure the React root element fills available width */

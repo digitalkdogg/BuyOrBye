@@ -1,32 +1,59 @@
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import './SearchBar.css'
-
-const stocks = [
-  { symbol: 'AAPL', name: 'Apple Inc.' },
-  { symbol: 'GOOGL', name: 'Alphabet Inc.' },
-  { symbol: 'MSFT', name: 'Microsoft Corporation' },
-  { symbol: 'AMZN', name: 'Amazon.com Inc.' },
-  { symbol: 'TSLA', name: 'Tesla Inc.' },
-  { symbol: 'CIEN', name: 'Ciena Corporation' },
-  // Add more as needed
-]
 
 function SearchBar({ onSelectStock }) {
   const [query, setQuery] = useState('')
   const [suggestions, setSuggestions] = useState([])
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState(null)
+  const debounceRef = useRef(null)
+  const controllerRef = useRef(null)
+
+  const fetchSuggestions = async (q) => {
+    if (!q || q.length < 2) {
+      setSuggestions([])
+      return
+    }
+
+    // Abort previous request
+    if (controllerRef.current) controllerRef.current.abort()
+    controllerRef.current = new AbortController()
+
+    setLoading(true)
+    setError(null)
+
+    try {
+      const res = await fetch(`/api/search?q=${encodeURIComponent(q)}&limit=10`, {
+        signal: controllerRef.current.signal
+      })
+      const json = await res.json()
+
+      // Twelve Data's symbol_search may return an object with a `data` array
+      const raw = json.data || json || []
+      const items = Array.isArray(raw)
+        ? raw.map(item => ({
+            symbol: item.symbol,
+            name: item.instrument_name || item.name || item.description || ''
+          }))
+        : []
+
+      setSuggestions(items.slice(0, 10))
+    } catch (err) {
+      if (err.name !== 'AbortError') {
+        console.error('Search failed', err)
+        setError('Search failed')
+      }
+    } finally {
+      setLoading(false)
+    }
+  }
 
   const handleInputChange = (e) => {
     const value = e.target.value
     setQuery(value)
-    if (value) {
-      const filtered = stocks.filter(stock =>
-        stock.symbol.toLowerCase().includes(value.toLowerCase()) ||
-        stock.name.toLowerCase().includes(value.toLowerCase())
-      )
-      setSuggestions(filtered.slice(0, 5))
-    } else {
-      setSuggestions([])
-    }
+
+    if (debounceRef.current) clearTimeout(debounceRef.current)
+    debounceRef.current = setTimeout(() => fetchSuggestions(value.trim()), 300)
   }
 
   const handleSelect = (stock) => {
@@ -39,10 +66,12 @@ function SearchBar({ onSelectStock }) {
     <div className="search-bar">
       <input
         type="text"
-        placeholder="Search for a stock..."
+        placeholder="Search for a stock (e.g. AAPL or WMT)..."
         value={query}
         onChange={handleInputChange}
       />
+      {loading && <div className="search-loading">Searching…</div>}
+      {error && <div className="search-error">{error}</div>}
       {suggestions.length > 0 && (
         <ul className="suggestions">
           {suggestions.map(stock => (
@@ -57,4 +86,3 @@ function SearchBar({ onSelectStock }) {
 }
 
 export default SearchBar
-
